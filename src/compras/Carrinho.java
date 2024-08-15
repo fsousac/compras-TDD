@@ -8,8 +8,8 @@ import java.util.List;
 
 public class Carrinho {
 	private final List<Item> produtosDisponiveis = new ArrayList<>();
-	private final float precoTotal;
 	private final List<Item> produtosCarrinho;
+	private float precoTotal;
 
 	public Carrinho() {
 		this.precoTotal = 0;
@@ -66,12 +66,17 @@ public class Carrinho {
 					}
 				}
 				user.setMoney(user.getMoney() + (item.getPrice() * quantidade));
+				this.precoTotal -= item.getPrice() * quantidade;
 				break;
 			}
 		}
 		if (produtoRemover == null) {
 			throw new Exception("Produto não encontrado no Carrinho");
 		}
+	}
+	
+	public float getPrecoTotal() {
+		return precoTotal;
 	}
 
 	public void addProdutoCarrinho(String nomeProduto, int quantidade, User user) throws Exception {
@@ -92,6 +97,7 @@ public class Carrinho {
 
 		this.produtosCarrinho.add(new Item(nomeProduto, cost, quantidade));
 		user.setMoney(user.getMoney() - (cost * quantidade));
+		this.precoTotal += cost * quantidade;
 		if (quantidade == disponivel) produtosDisponiveis.remove(produto);
 		else {
 			produto.setQuantity(disponivel - quantidade);
